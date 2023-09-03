@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beyond Tourist Traps</title>
+     <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column; /* Stacks elements vertically */
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            background: black;
+        }
+
+        #video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        #content {
+            text-align: center;
+            color: #ffffff; /* Set text color to white using hex value */
+            z-index: 1; /* Ensure text is above the video background */
+        }
+
+        #logo {
+            width: 150px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        #title {
+            font-size: 36px;
+        }
+
+        #subtitle {
+            font-size: 24px;
+            margin-top: 10px; /* Add margin-top to create space between title and subtitle */
+        }
+
+      #search-container {
+            position: relative;
+            margin-top: 20px;
+            text-align: center; /* Center the search input and dropdown */
+        }
+
+        #search-input {
+            width: 300px;
+            height: 40px;
+            border: none;
+            border-radius: 20px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        #autocomplete-suggestions {
+            position: absolute;
+            top: calc(100% + 10px); /* Position suggestions below the input with a gap */
+            left: 50%; /* Center the dropdown box horizontally */
+            transform: translateX(-50%); /* Adjust to center perfectly */
+            width: 300px; /* Set the width to match search box */
+            background-color: #9AFF9B; /* Lighter grey background color */
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            padding: 10px;
+			            transition: opacity 0.3s ease; /* Add smooth transition effect */
+
+            display: none;
+            z-index: 2;
+        }
+
+        .autocomplete-option {
+            cursor: pointer;
+            padding: 5px;
+            color: black; /* Set text color to black */
+			
+        }
+
+        #autocomplete-suggestions.empty {
+            display: none;
+			
+   	  }
+
+			
+        #alternative-suggestion {
+            text-align: center;
+            color: green; /* Change text color to green */
+            font-weight: bold;
+            margin-bottom: 5px; /* Add margin at the bottom */
+        }
+
+        .alternative-button {
+            display: block;
+            margin: 10px auto;
+            color: white;
+            background-color: orange;
+            border: none;
+            border-radius: 10px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+		
+		
+		
+		
+		
+	#countrydesc-container {
+    position: fixed; /* Changing to fixed positioning */
+    bottom: 0; /* Setting it to the bottom of the page */
+    left: 50%; /* Center the container horizontally */
+    transform: translateX(-50%); /* Perfectly center the container */
+    display: flex;
+    flex-direction: column; /* Stacking child elements vertically */
+    align-items: center; /* Center the child elements horizontally */
+    justify-content: center; /* Center the child elements vertically */
+}
+
+.desc-text {
+    float: left;
+    width: 45%;
+    color: #FFF;
+    margin-right: 5%; /* Separation between text and slideshow */
+}
+
+.desc-slideshow {
+    float: right;
+    width: 50%;
+}
+
+.desc-slideshow img {
+    width: 50%; /* Reducing the width of the slideshow images */
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: none; /* All images will be hidden by default */
+}
+
+
+.desc-text, .desc-slideshow {
+    box-shadow: none; /* Reset box-shadow for hidden state */
+    padding: 10px; /* Some padding to give space between content and the border */
+}
+
+
+
+#countrydesc-container {
+    display: flex;
+    justify-content: space-between;  /* This will create the space in between */
+    align-items: flex-start;  /* Ensure they align at the top */
+    width: 90%;  /* Total width, including the boxes and the spaces */
+    margin: 0 auto;  /* Center the container */
+    /* ... other existing properties ... */
+}
+
+.visible {
+    box-shadow: 0px 0px 0px 5px black, 0px 0px 0px 6px white; 
+}
+
+
+/* If you have any other styling for these classes, keep them, just add the above properties */
+
+
+.desc-text {
+    display: none; /* Hide by default */
+    /* ... existing properties ... */
+}
+
+    </style>
+</head>
+<body>
+    <video id="video-background" autoplay loop muted>
+        <source src="{{ url_for('static', filename='video.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div id="content">
+        <img id="logo" src="{{ url_for('static', filename='logo.png') }}" alt="Beyond Tourist Traps Logo">
+        <h1 id="title">Beyond Tourist Traps</h1>
+        <p id="subtitle">Where would you like to go?</p>
+    <div id="search-container">
+        <input id="search-input" type="text" placeholder="Search destinations...">
+        <div id="alternative-suggestion"></div>
+        <div id="autocomplete-suggestions"></div>
+		</div>
+		
+   <div id="countrydesc-container">
+    <div class="desc-text" id="serbia-text">lolok1</div>
+    <div class="desc-slideshow" id="serbia-slideshow">
+        <img src="{{ url_for('static', filename='images/ser.png') }}" alt="Serbia Image 1">
+        <img src="{{ url_for('static', filename='images/ser2.jpg') }}" alt="Serbia Image 2">
+    </div>
+
+    <div class="desc-text" id="bosnia-text">lolok2</div>
+    <div class="desc-slideshow" id="bosnia-slideshow">
+        <img src="{{ url_for('static', filename='images/bosa.png') }}" alt="Bosnia Image 1">
+        <img src="{{ url_for('static', filename='images/bos2.png') }}" alt="Bosnia Image 2">
+    </div>
+
+    <div class="desc-text" id="croatia-text">lolok3</div>
+    <div class="desc-slideshow" id="croatia-slideshow">
+        <img src="{{ url_for('static', filename='images/cro.png') }}" alt="Croatia Image 1">
+        <img src="{{ url_for('static', filename='images/cot2.png') }}" alt="Croatia Image 2">
+    </div>
+</div>
+
+    <script>
+        const searchInput = document.getElementById('search-input');
+        const autocompleteSuggestions = document.getElementById('autocomplete-suggestions');
+        const alternativeSuggestion = document.getElementById('alternative-suggestion');
+
+        const countrySuggestions = {
+            'Serbia': 'https://www.google.com/',
+            'Bosnia': 'https://www.lolok.com/',
+            'Montenegro': 'https://www.apple.com/',
+            'Croatia, why not visit Montenegro instead?': 'https://www.apple.com/',
+
+            // Add more country suggestions here
+        };
+
+        const alternativeSuggestions = {
+            'Croatia': {
+                suggestion: 'Montenegro',
+                redirect: 'https://www.apple.com/'
+            },
+            'Germany': {
+                suggestion: 'Germany',
+                redirect: 'https://www.obi.at/'
+            },
+            'France': {
+                suggestion: 'Montenegro',
+                redirect: 'https://www.yoruba.ie/'
+            },
+            // Add more alternative suggestions here
+        };
+
+        searchInput.addEventListener('input', (event) => {
+            const inputTerm = event.target.value.toLowerCase();
+            autocompleteSuggestions.innerHTML = ''; // Clear suggestions
+
+            if (alternativeSuggestions[inputTerm]) {
+                showAlternativeSuggestion(inputTerm);
+            } else {
+                showCountrySuggestions(inputTerm);
+            }
+        });
+
+        function showCountrySuggestions(inputTerm) {
+            for (const country in countrySuggestions) {
+                if (country.toLowerCase().startsWith(inputTerm)) {
+                    createSuggestionElement(country);
+                }
+            }
+            hideAlternativeSuggestion();
+        }
+		
+
+        function showAlternativeSuggestion(inputTerm) {
+            const altSuggestion = alternativeSuggestions[inputTerm];
+            alternativeSuggestion.innerHTML = `How about you visit <span style="color: orange;">${altSuggestion.suggestion}</span> instead?`;
+            autocompleteSuggestions.innerHTML = ''; // Clear regular suggestions
+            hideAlternativeSuggestion();
+
+            const alternativeButton = document.createElement('button');
+            alternativeButton.textContent = 'Redirect';
+            alternativeButton.className = 'alternative-button';
+            alternativeButton.addEventListener('click', () => {
+                window.location.href = altSuggestion.redirect;
+            });
+
+            alternativeSuggestion.appendChild(alternativeButton);
+        }
+
+        function hideAlternativeSuggestion() {
+            alternativeSuggestion.innerHTML = '';
+        }
+
+        function createSuggestionElement(suggestion) {
+            const suggestionElement = document.createElement('div');
+            suggestionElement.className = 'autocomplete-option';
+            suggestionElement.textContent = suggestion;
+            autocompleteSuggestions.appendChild(suggestionElement);
+
+            suggestionElement.addEventListener('click', () => {
+                const redirectTo = countrySuggestions[suggestion];
+                window.location.href = redirectTo;
+            });
+
+            autocompleteSuggestions.style.display = 'block';
+        }
+		
+		
+		
+		
+		
+		
+		// ... existing JS code ...
+
+function showCountrySuggestions(inputTerm) {
+    for (const country in countrySuggestions) {
+        if (country.toLowerCase().startsWith(inputTerm)) {
+            createSuggestionElement(country);
+            showCountryDescription(country.toLowerCase()); // New function
+        }
+    }
+    hideAlternativeSuggestion();
+}
+
+// New function
+function showCountryDescription(country) {
+    const container = document.getElementById('countrydesc-container');
+    const allTexts = container.querySelectorAll('.desc-text');
+    const allSlideshows = container.querySelectorAll('.desc-slideshow');
+
+    // Initially hide all and remove the 'visible' class
+    allTexts.forEach(text => {
+        text.style.display = 'none';
+        text.classList.remove('visible'); // Remove the class
+    });
+    allSlideshows.forEach(slideshow => {
+        slideshow.style.display = 'none';
+        slideshow.querySelectorAll('img').forEach(img => img.style.display = 'none');
+        slideshow.classList.remove('visible'); // Remove the class
+    });
+
+    // Show the matching country's description and first image
+    const matchedText = document.getElementById(`${country}-text`);
+    const matchedSlideshow = document.getElementById(`${country}-slideshow`);
+
+    if (matchedText && matchedSlideshow) {
+        matchedText.style.display = 'block';
+        matchedText.classList.add('visible'); // Add the class
+        matchedSlideshow.style.display = 'block';
+        matchedSlideshow.querySelector('img').style.display = 'block'; 
+        matchedSlideshow.classList.add('visible'); // Add the class
+    }
+
+    container.style.display = 'block';
+}
+
+    </script>
+</body>
+</html>
